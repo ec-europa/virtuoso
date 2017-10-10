@@ -1,0 +1,17 @@
+{
+    "name": "ec-europa/virtuoso",
+    "type": "library",
+    "license": "GPLv3",
+    "authors": [
+        {
+            "name": "Sander Van Dooren",
+            "email": "sander.vandooren@ausy.be"
+        }
+    ],
+    "minimum-stability": "stable",
+    "autoload": {
+        "psr-4": {
+            "Virtuoso\\": "src/Virtuoso"
+        }
+    }
+}

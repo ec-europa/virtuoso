@@ -1,0 +1,46 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+
+<project name="Virtuoso" default="help" basedir=".">
+    <property file="build.properties.local"/>
+    <property file="build.properties"/>
+    <property file="build.properties.dist"/>
+    <property name="virtuoso.root" value="${project.basedir}/vendor/ec-europa/virtuoso"/>
+
+    <echo msg="Loading Virtuoso Sparql Permissions task." />
+    <taskdef name="setvirtuososparqlpermissions" classname="\Virtuoso\Task\SetVirtuosoSparqlPermissions" />
+
+    <echo msg="Loading Import RDF fixtures task." />
+    <taskdef name="importrdffixtures" classname="\Virtuoso\Task\ImportRdfFixtures" />
+
+    <echo msg="Loading After Import RDF fixtures task." />
+    <taskdef name="afterrdffixturesimport" classname="\Virtuoso\Task\AfterFixturesImportCleanup" />
+
+    <echo msg="Loading Purge RDF Backend task." />
+    <taskdef name="rdfpurge" classname="\Virtuoso\Task\RdfPurge" />
+
+    <target name="start-virtuoso" depends="setup-virtuoso">
+        <exec
+                command='${virtuoso.binary}'
+                dir="${virtuoso.root}/db"
+                passthru="true"
+                checkreturn="true"/>
+    </target>
+
+    <target name="setup-virtuoso">
+        <delete dir="${virtuoso.root}/db" includeemptydirs="true" verbose="true" failonerror="true"/>
+        <mkdir dir="${virtuoso.root}/db"/>
+        <if>
+            <available file="${virtuoso.root}/db/virtuoso.ini" type="file" property="virtuoso.inifile.available"/>
+            <then>
+                <echo message="Deleting existing virtuoso.ini"/>
+                <delete file="${virtuoso.root}/db/virtuoso.ini" failonerror="false"/>
+            </then>
+        </if>
+        <copy file="${virtuoso.root}/virtuoso.ini.template" tofile="${virtuoso.root}/db/virtuoso.ini">
+            <filterchain>
+                <expandproperties/>
+            </filterchain>
+        </copy>
+    </target>
+
+</project>
