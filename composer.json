@@ -1,7 +1,7 @@
 {
     "name": "ec-europa/virtuoso",
     "type": "library",
-    "license": "GPLv3",
+    "license": "EUPL",
     "authors": [
         {
             "name": "Sander Van Dooren",
@@ -11,7 +11,7 @@
     "minimum-stability": "stable",
     "autoload": {
         "psr-4": {
-            "Virtuoso\\": "src/Virtuoso"
+            "Virtuoso\\": "src"
         }
     }
 }
