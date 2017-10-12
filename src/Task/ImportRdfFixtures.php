@@ -1,13 +1,13 @@
 <?php
 /**
  * @file
- * Contains \DrupalProject\build\Phing\SetVirtuosoSparqlPermissions.
+ * Contains \DrupalProject\build\Phing\ImportRdfFixtures.
  */
 
 namespace Virtuoso\Task;
 
 /**
- * Class SetVirtuosoSparqlPermissions.
+ * Class ImportRdfFixtures.
  */
 class ImportRdfFixtures extends VirtuosoTaskBase {
 

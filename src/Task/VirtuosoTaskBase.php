@@ -6,8 +6,6 @@
 
 namespace Virtuoso\Task;
 
-require_once 'phing/Task.php';
-
 /**
  * Class SetVirtuosoSparqlPermissions.
  */
