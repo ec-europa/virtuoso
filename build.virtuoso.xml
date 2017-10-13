@@ -4,22 +4,30 @@
     <property name="virtuoso.root" value="${project.basedir}/vendor/ec-europa/virtuoso"/>
 
     <taskdef name="virtuoso-set-update-permission" classname="Virtuoso\Task\SetVirtuosoSparqlPermissions"/>
-    <taskdef name="virtuoso-stop" classname="Virtuoso\Task\StopVirtuoso"/>
 
-    <taskdef name="import-rdf-fixtures" classname="Virtuoso\Task\ImportRdfFixtures"/>
+    <taskdef name="rdf-import-fixtures" classname="Virtuoso\Task\ImportRdfFixtures"/>
 
-
-    <echo msg="Loading Purge RDF Backend task."/>
     <taskdef name="rdf-purge" classname="Virtuoso\Task\RdfPurge"/>
 
+    <taskdef name="virtuoso-stop" classname="Virtuoso\Task\StopVirtuoso"/>
+
     <target name="virtuoso-start">
-        <exec
-                command="${virtuoso.binary} +configfile ${virtuoso.root}/db/virtuoso.ini +wait"
-                dir="${virtuoso.root}/db"
-                passthru="true"
-                checkreturn="true"
-                logoutput="true"
-        />
+        <if>
+            <available file="${virtuoso.root}/db/virtuoso.lck"/>
+            <then>
+                <fail message="Virtuoso is already running."/>
+            </then>
+            <else>
+                <exec
+                        command="${virtuoso.binary} +configfile ${virtuoso.root}/db/virtuoso.ini +wait"
+                        dir="${virtuoso.root}/db"
+                        passthru="true"
+                        checkreturn="true"
+                        logoutput="true"
+                />
+            </else>
+        </if>
+
     </target>
 
     <target name="virtuoso-stop">
