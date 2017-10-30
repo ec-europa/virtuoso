@@ -2,6 +2,8 @@
 
 <project name="Virtuoso" default="help" basedir=".">
     <property name="virtuoso.root" value="${project.basedir}/vendor/ec-europa/virtuoso"/>
+    <property name="virtuoso.database" value="${project.basedir}/vendor/ec-europa/virtuoso/db"/>
+    <property name="virtuoso.backup" value="${project.basedir}/vendor/ec-europa/virtuoso/backup"/>
 
     <taskdef name="virtuoso-set-update-permission" classname="Virtuoso\Task\SetVirtuosoSparqlPermissions"/>
 
@@ -13,14 +15,14 @@
 
     <target name="virtuoso-start">
         <if>
-            <available file="${virtuoso.root}/db/virtuoso.lck"/>
+            <available file="${virtuoso.database}/virtuoso.lck"/>
             <then>
                 <fail message="Virtuoso is already running."/>
             </then>
             <else>
                 <exec
-                        command="${virtuoso.binary} +configfile ${virtuoso.root}/db/virtuoso.ini +wait"
-                        dir="${virtuoso.root}/db"
+                        command="${virtuoso.binary} +configfile ${virtuoso.database}/virtuoso.ini +wait"
+                        dir="${virtuoso.database}"
                         passthru="true"
                         checkreturn="true"
                         logoutput="true"
@@ -32,7 +34,7 @@
 
     <target name="virtuoso-stop">
         <if>
-            <available file="${virtuoso.root}/db/virtuoso.lck"/>
+            <available file="${virtuoso.database}/virtuoso.lck"/>
             <then>
                 <virtuoso-stop
                         IsqlPath="${isql.bin}"
@@ -48,8 +50,8 @@
     </target>
     <target name="virtuoso-restore-backup" depends="virtuoso-stop, virtuoso-setup">
         <exec
-                command="${virtuoso.binary} +configfile ${virtuoso.root}/db/virtuoso.ini +restore-backup 20171011_JOINUP_FULL_DUMP_"
-                dir="${virtuoso.root}/backup"
+                command="${virtuoso.binary} +configfile ${virtuoso.database}/virtuoso.ini +restore-backup 20171011_JOINUP_FULL_DUMP_"
+                dir="${virtuoso.backup}"
                 passthru="true"
                 checkreturn="true"
                 logoutput="true"
@@ -62,14 +64,14 @@
     <target name="virtuoso-setup">
         <!-- Create virtuoso.ini -->
         <if>
-            <available file="${virtuoso.root}/db/virtuoso.lck"/>
+            <available file="${virtuoso.database}/virtuoso.lck"/>
             <then>
                 <fail message="Virtuoso is still running."/>
             </then>
             <else>
-                <delete dir="${virtuoso.root}/db" includeemptydirs="true" verbose="true" failonerror="true"/>
-                <mkdir dir="${virtuoso.root}/db"/>
-                <copy file="${virtuoso.root}/virtuoso.ini.template" tofile="${virtuoso.root}/db/virtuoso.ini">
+                <delete dir="${virtuoso.database}" includeemptydirs="true" verbose="true" failonerror="true"/>
+                <mkdir dir="${virtuoso.database}"/>
+                <copy file="${virtuoso.root}/virtuoso.ini.template" tofile="${virtuoso.database}/virtuoso.ini">
                     <filterchain>
                         <expandproperties/>
                     </filterchain>
