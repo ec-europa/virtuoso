@@ -5,13 +5,11 @@
     <property name="virtuoso.database" value="${project.basedir}/vendor/ec-europa/virtuoso/db"/>
     <property name="virtuoso.backup" value="${project.basedir}/vendor/ec-europa/virtuoso/backup"/>
 
-    <taskdef name="virtuoso-set-update-permission" classname="Virtuoso\Task\SetVirtuosoSparqlPermissions"/>
-
+    <taskdef name="virtuoso-get-backup-prefix" classname="Virtuoso\Task\GetBackupPrefix"/>
     <taskdef name="rdf-import-fixtures" classname="Virtuoso\Task\ImportRdfFixtures"/>
-
     <taskdef name="rdf-purge" classname="Virtuoso\Task\RdfPurge"/>
-
     <taskdef name="virtuoso-stop" classname="Virtuoso\Task\StopVirtuoso"/>
+    <taskdef name="virtuoso-set-update-permission" classname="Virtuoso\Task\SetVirtuosoSparqlPermissions"/>
 
     <target name="virtuoso-start">
         <if>
@@ -48,8 +46,11 @@
     </target>
 
     <target name="virtuoso-restore-backup" depends="virtuoso-stop, virtuoso-setup">
+        <virtuoso-get-backup-prefix
+                dir="${virtuoso.backup}"
+                propertyName="virtuoso.backup.prefix"/>
         <exec
-                command="${virtuoso.binary} +configfile ${virtuoso.database}/virtuoso.ini +restore-backup 20171011_JOINUP_FULL_DUMP_"
+                command="${virtuoso.binary} +configfile ${virtuoso.database}/virtuoso.ini +restore-backup ${virtuoso.backup.prefix}"
                 dir="${virtuoso.backup}"
                 passthru="true"
                 checkreturn="true"
