@@ -15,7 +15,7 @@
         <if>
             <available file="${virtuoso.database}/virtuoso.lck"/>
             <then>
-                <fail message="Virtuoso is already running."/>
+                <echo message="Virtuoso is already running."/>
             </then>
             <else>
                 <exec
