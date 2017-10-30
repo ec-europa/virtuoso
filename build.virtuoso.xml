@@ -61,22 +61,14 @@
 
     <target name="virtuoso-restart" depends="virtuoso-stop, virtuoso-start"/>
 
-    <target name="virtuoso-setup">
+    <target name="virtuoso-setup" depends="virtuoso-stop">
         <!-- Create virtuoso.ini -->
-        <if>
-            <available file="${virtuoso.database}/virtuoso.lck"/>
-            <then>
-                <fail message="Virtuoso is still running."/>
-            </then>
-            <else>
-                <delete dir="${virtuoso.database}" includeemptydirs="true" verbose="true" failonerror="true"/>
-                <mkdir dir="${virtuoso.database}"/>
-                <copy file="${virtuoso.root}/virtuoso.ini.template" tofile="${virtuoso.database}/virtuoso.ini">
-                    <filterchain>
-                        <expandproperties/>
-                    </filterchain>
-                </copy>
-            </else>
-        </if>
+        <delete dir="${virtuoso.database}" includeemptydirs="true" verbose="true" failonerror="true"/>
+        <mkdir dir="${virtuoso.database}"/>
+        <copy file="${virtuoso.root}/virtuoso.ini.template" tofile="${virtuoso.database}/virtuoso.ini">
+            <filterchain>
+                <expandproperties/>
+            </filterchain>
+        </copy>
     </target>
 </project>
