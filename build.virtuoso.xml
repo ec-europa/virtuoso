@@ -29,7 +29,6 @@
                 />
             </else>
         </if>
-
     </target>
 
     <target name="virtuoso-stop">
@@ -46,8 +45,8 @@
                 <echo msg="Virtuoso not running, shutdown not required."/>
             </else>
         </if>
-
     </target>
+
     <target name="virtuoso-restore-backup" depends="virtuoso-stop, virtuoso-setup">
         <exec
                 command="${virtuoso.binary} +configfile ${virtuoso.database}/virtuoso.ini +restore-backup 20171011_JOINUP_FULL_DUMP_"
@@ -57,10 +56,10 @@
                 logoutput="true"
         />
         <phingcall target="virtuoso-start"/>
-
     </target>
 
     <target name="virtuoso-restart" depends="virtuoso-stop, virtuoso-start"/>
+
     <target name="virtuoso-setup">
         <!-- Create virtuoso.ini -->
         <if>
