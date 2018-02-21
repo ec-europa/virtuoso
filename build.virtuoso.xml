@@ -73,6 +73,9 @@
         </copy>
     </target>
 
-    <target name="purge-virtuoso-backend" depends="virtuoso-stop, virtuoso-setup, virtuoso-start"/>
+    <target name="purge-virtuoso-backend">
+        <exec command="echo 'DELETE FROM DB.DBA.RDF_QUAD;' | ${isql.bin} '${sparql.dsn}' '${sparql.user}' '${sparql.password}' >/dev/null"
+              passthru="true"/>
+    </target>
 
 </project>
