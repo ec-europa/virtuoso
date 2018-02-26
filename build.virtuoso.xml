@@ -7,7 +7,6 @@
 
     <taskdef name="virtuoso-get-backup-prefix" classname="Virtuoso\Task\GetBackupPrefix"/>
     <taskdef name="rdf-import-fixtures" classname="Virtuoso\Task\ImportRdfFixtures"/>
-    <taskdef name="rdf-purge" classname="Virtuoso\Task\RdfPurge"/>
     <taskdef name="virtuoso-stop" classname="Virtuoso\Task\StopVirtuoso"/>
     <taskdef name="virtuoso-set-update-permission" classname="Virtuoso\Task\SetVirtuosoSparqlPermissions"/>
 
@@ -63,7 +62,9 @@
 
     <target name="virtuoso-setup" depends="virtuoso-stop">
         <!-- Create virtuoso.ini -->
-        <delete dir="${virtuoso.database}" includeemptydirs="true" verbose="true" failonerror="true"/>
+        <delete includeemptydirs="true" verbose="true" failonerror="true">
+            <fileset dir="${virtuoso.database}" excludes=".gitkeep"/>
+        </delete>
         <mkdir dir="${virtuoso.database}"/>
         <copy file="${virtuoso.root}/virtuoso.ini.template" tofile="${virtuoso.database}/virtuoso.ini">
             <filterchain>
@@ -71,4 +72,10 @@
             </filterchain>
         </copy>
     </target>
+
+    <target name="purge-virtuoso-backend">
+        <exec command="echo 'DELETE FROM DB.DBA.RDF_QUAD;' | ${isql.bin} '${sparql.dsn}' '${sparql.user}' '${sparql.password}' >/dev/null"
+              passthru="true"/>
+    </target>
+
 </project>
