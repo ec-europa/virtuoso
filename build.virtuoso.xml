@@ -89,7 +89,6 @@
                 <property name="interval" value="60"/>
             </then>
         </if>
-        <echo msg="echo 'checkpoint_interval(${interval});' | ${isql.bin} '${sparql.dsn}' '${sparql.user}' '${sparql.password}'"/>
         <exec command="echo 'checkpoint_interval(${interval});' | ${isql.bin} '${sparql.dsn}' '${sparql.user}' '${sparql.password}'"/>
     </target>
 
