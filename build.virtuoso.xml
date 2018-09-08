@@ -89,11 +89,11 @@
                 <property name="interval" value="60"/>
             </then>
         </if>
-        <exec command="echo 'checkpoint_interval(${interval});' | ${isql.bin} '${sparql.dsn}' '${sparql.user}' '${sparql.password}'"/>
+        <exec command="echo 'checkpoint_interval(${interval});' | ${isql.bin} '${sparql.dsn}' '${sparql.user}' '${sparql.password}'" passthru="true"/>
     </target>
 
     <target name="execute-virtuoso-checkpoint" description="Executes a checkpoint on the virtuoso instance.">
-        <exec command="echo 'checkpoint;' | ${isql.bin} '${sparql.dsn}' '${sparql.user}' '${sparql.password}'"/>
+        <exec command="echo 'checkpoint;' | ${isql.bin} '${sparql.dsn}' '${sparql.user}' '${sparql.password}'" passthru="true"/>
     </target>
 
 </project>
