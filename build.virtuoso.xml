@@ -81,19 +81,29 @@
     <!-- This should run as `phing_executable set-virtuoso-checkpoint -Dinterval=60` -->
     <target name="set-virtuoso-checkpoint" description="Sets the checkpoint interval to the virtuoso instance.">
         <if>
-            <not>
-                <isset property="interval"/>
-            </not>
+            <available file="${isql.bin}" type="file" property="isql.bin.exists"/>
             <then>
-                <!-- The default value for the checkpoints is 60 minutes. -->
-                <property name="interval" value="60"/>
+                <if>
+                    <not>
+                        <isset property="interval"/>
+                    </not>
+                    <then>
+                        <!-- The default value for the checkpoints is 60 minutes. -->
+                        <property name="interval" value="60"/>
+                    </then>
+                </if>
+                <exec command="echo 'checkpoint_interval(${interval});' | ${isql.bin} '${sparql.dsn}' '${sparql.user}' '${sparql.password}'" passthru="true"/>
             </then>
         </if>
-        <exec command="echo 'checkpoint_interval(${interval});' | ${isql.bin} '${sparql.dsn}' '${sparql.user}' '${sparql.password}'" passthru="true"/>
     </target>
 
     <target name="execute-virtuoso-checkpoint" description="Executes a checkpoint on the virtuoso instance.">
-        <exec command="echo 'checkpoint;' | ${isql.bin} '${sparql.dsn}' '${sparql.user}' '${sparql.password}'" passthru="true"/>
+        <if>
+            <available file="${isql.bin}" type="file" property="isql.bin.exists"/>
+            <then>
+                <exec command="echo 'checkpoint;' | ${isql.bin} '${sparql.dsn}' '${sparql.user}' '${sparql.password}'" passthru="true"/>
+            </then>
+        </if>
     </target>
 
 </project>
