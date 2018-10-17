@@ -6,6 +6,10 @@
 
 namespace Virtuoso\Task;
 
+use \EasyRdf\GraphStore;
+use \EasyRdf\Graph;
+use \EasyRdf\Sparql\Client;
+
 /**
  * Class SetVirtuosoSparqlPermissions.
  */
@@ -24,6 +28,13 @@ class VirtuosoTaskBase extends \Task {
    * @var string
    */
   protected $dsn;
+
+  /**
+   * The port number of the endpoint.
+   *
+   * @var string
+   */
+  protected $port;
 
   /**
    * The database connection username.
@@ -47,9 +58,16 @@ class VirtuosoTaskBase extends \Task {
   protected $sharedDirectory;
 
   /**
+   * Executes the query using the isql binary.
+   *
    * @param string $query
+   *   The query string.
+   *
    * @return $this
+   *   The object itself for chaining.
+   *
    * @throws \BuildException
+   *   Thrown when there is an error with executing the command.
    */
   protected function execute($query) {
     $parts = [
@@ -80,10 +98,64 @@ class VirtuosoTaskBase extends \Task {
   }
 
   /**
-   * Set the permissions of the '/sparql' endpoint to allow update queries.
+   * Returns a GraphStore object of initialized with the object's settings.
+   *
+   * @return \EasyRdf\GraphStore
+   *   The GraphStore object.
+   */
+  function graphStore() {
+    $connect_string = 'http://' . $this->dsn . ':' . $this->port . '/sparql-graph-crud';
+    // Use a local SPARQL 1.1 Graph Store.
+    return new GraphStore($connect_string);
+  }
+
+  /**
+   * Clears a graph from the endpoint.
+   *
+   * @param string $uri
+   *   A uri representing a graph.
+   *
+   * @throws \EasyRdf\Exception
+   *   Thrown if something went wrong with the delete method.
+   */
+  function deleteGraph($uri) {
+    $this->graphStore()->delete($uri);
+  }
+
+  /**
+   * Replace the contents of a graph in the graph store with new data
+   *
+   * @param string $file_path
+   *   The path of the file that should be parsed and uploaded.
+   * @param string $graph_uri
+   *   The graph uri that the triples should end up to.
+   * @param string $format
+   *   The format of the contents of the file provided by $file_path.
+   */
+  function replaceGraph($file_path, $graph_uri, $format = 'ntriples') {
+    $graph = new Graph();
+    $graph->parseFile($file_path);
+    $this->graphStore()->replace($graph, $graph_uri, $format);
+  }
+
+  /**
+   * Executes a query through an HTTP request.
+   *
+   * @param string $query
+   *   The string version of the query to execute.
+   *
+   */
+  function sparql($query) {
+    // @todo: The port should be passed as a variable below.
+    $connect_string = 'http://' . $this->dsn . ':8890/sparql';
+    $client = new Client($connect_string);
+    $client->query($query);
+  }
+
+  /**
+   * {@inheritdoc}
    */
   public function main() {
-
     throw new \Exception('VirtuosoTaskBase should not be directly instantiated.');
   }
 
@@ -108,6 +180,16 @@ class VirtuosoTaskBase extends \Task {
   }
 
   /**
+   * Sets the port of the endpoint.
+   *
+   * @param string $port
+   *   The port number.
+   */
+  public function setPort($port) {
+    $this->port = $port;
+  }
+
+  /**
    * Set user name.
    *
    * @param string $user
@@ -127,6 +209,12 @@ class VirtuosoTaskBase extends \Task {
     $this->pass = $pass;
   }
 
+  /**
+   * Sets the shared directory variable.
+   *
+   * @param string $dir
+   *   The shared directory path.
+   */
   public function setSharedDirectory($dir) {
     $this->sharedDirectory = $dir;
   }
