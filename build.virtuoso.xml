@@ -44,6 +44,14 @@
         </if>
     </target>
 
+    <target name="setup-virtuoso-permissions">
+        <virtuoso-set-update-permission
+                IsqlPath="${isql.bin}"
+                DataSourceName="${sparql.dsn}"
+                Username="${sparql.user}"
+                Password="${sparql.password}" />
+    </target>
+
     <target name="virtuoso-restore-backup" depends="virtuoso-stop, virtuoso-setup">
         <virtuoso-get-backup-prefix
                 dir="${virtuoso.backup}"
