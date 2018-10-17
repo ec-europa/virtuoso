@@ -45,11 +45,20 @@
     </target>
 
     <target name="setup-virtuoso-permissions">
-        <virtuoso-set-update-permission
-                IsqlPath="${isql.bin}"
-                DataSourceName="${sparql.dsn}"
-                Username="${sparql.user}"
-                Password="${sparql.password}" />
+        <if>
+            <available file="${isql.bin}" type="file" property="isql.bin.exists" />
+            <then>
+                <virtuoso-set-update-permission
+                        IsqlPath="${isql.bin}"
+                        DataSourceName="${sparql.dsn}"
+                        Username="${sparql.user}"
+                        Password="${sparql.password}" />
+            </then>
+            <else>
+                <echo msg="The isql binary was not found. Skipping." />
+            </else>
+        </if>
+
     </target>
 
     <target name="virtuoso-restore-backup" depends="virtuoso-stop, virtuoso-setup">
