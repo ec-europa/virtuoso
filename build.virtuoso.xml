@@ -7,6 +7,7 @@
 
     <taskdef name="virtuoso-get-backup-prefix" classname="Virtuoso\Task\GetBackupPrefix"/>
     <taskdef name="rdf-import-fixtures" classname="Virtuoso\Task\ImportRdfFixtures"/>
+    <taskdef name="delete-all-triples" classname="Virtuoso\Task\DeleteAllTriples"/>
     <taskdef name="virtuoso-stop" classname="Virtuoso\Task\StopVirtuoso"/>
     <taskdef name="virtuoso-set-update-permission" classname="Virtuoso\Task\SetVirtuosoSparqlPermissions"/>
 
@@ -75,8 +76,12 @@
     </target>
 
     <target name="purge-virtuoso-backend">
-        <exec command="echo 'DELETE FROM DB.DBA.RDF_QUAD;' | ${isql.bin} '${sparql.dsn}' '${sparql.user}' '${sparql.password}' >/dev/null"
-              passthru="true"/>
+        <delete-all-triples
+                IsqlPath="${isql.bin}"
+                DataSourceName="${sparql.dsn}"
+                Username="${sparql.user}"
+                Password="${sparql.password}"
+        />
     </target>
 
     <!-- This should run as `phing_executable set-virtuoso-checkpoint -Dinterval=60` -->
