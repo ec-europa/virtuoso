@@ -23,32 +23,39 @@ class VirtuosoTaskBase extends \Task {
   protected $isqlPath;
 
   /**
+   * The protocol to use.
+   *
+   * @var string
+   */
+  protected $protocol = 'http://';
+
+  /**
    * The data source name.
    *
    * @var string
    */
-  protected $dsn;
+  protected $dsn = 'localhost';
 
   /**
    * The port number of the endpoint.
    *
    * @var string
    */
-  protected $port;
+  protected $port = 8890;
 
   /**
    * The database connection username.
    *
    * @var string
    */
-  protected $user;
+  protected $user = 'dba';
 
   /**
    * The database connection password.
    *
    * @var string
    */
-  protected $pass;
+  protected $pass = 'dba';
 
   /**
    * A directory, mounted on both the deployment machine and the db server.
@@ -104,7 +111,7 @@ class VirtuosoTaskBase extends \Task {
    *   The GraphStore object.
    */
   function graphStore() {
-    $connect_string = 'http://' . $this->dsn . ':' . $this->port . '/sparql-graph-crud';
+    $connect_string = $this->protocol . $this->dsn . ':' . $this->port . '/sparql-graph-crud';
     // Use a local SPARQL 1.1 Graph Store.
     return new GraphStore($connect_string);
   }
@@ -147,7 +154,7 @@ class VirtuosoTaskBase extends \Task {
    */
   function sparql($query) {
     // @todo: The port should be passed as a variable below.
-    $connect_string = 'http://' . $this->dsn . ':8890/sparql';
+    $connect_string = $this->protoccol . $this->dsn . ':' . $this->port . '/sparql';
     $client = new Client($connect_string);
     $client->query($query);
   }
@@ -167,6 +174,16 @@ class VirtuosoTaskBase extends \Task {
    */
   public function setIsqlPath($path) {
     $this->isqlPath = $path;
+  }
+
+  /**
+   * Set the protocol for the queries.
+   *
+   * @param string $protocol
+   *    The protocol for the queries.
+   */
+  public function setProtocol($protocol) {
+    $this->protocol = $protocol;
   }
 
   /**
