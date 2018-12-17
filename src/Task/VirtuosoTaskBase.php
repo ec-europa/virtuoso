@@ -110,7 +110,7 @@ class VirtuosoTaskBase extends \Task {
    * @return \EasyRdf\GraphStore
    *   The GraphStore object.
    */
-  function graphStore() {
+  public function graphStore() {
     $connect_string = $this->protocol . $this->dsn . ':' . $this->port . '/sparql-graph-crud';
     // Use a local SPARQL 1.1 Graph Store.
     return new GraphStore($connect_string);
@@ -125,7 +125,7 @@ class VirtuosoTaskBase extends \Task {
    * @throws \EasyRdf\Exception
    *   Thrown if something went wrong with the delete method.
    */
-  function deleteGraph($uri) {
+  public function deleteGraph($uri) {
     $this->graphStore()->delete($uri);
   }
 
@@ -139,7 +139,7 @@ class VirtuosoTaskBase extends \Task {
    * @param string $format
    *   The format of the contents of the file provided by $file_path.
    */
-  function replaceGraph($file_path, $graph_uri, $format = 'ntriples') {
+  public function replaceGraph($file_path, $graph_uri, $format = 'ntriples') {
     $graph = new Graph();
     $graph->parseFile($file_path);
     $this->graphStore()->replace($graph, $graph_uri, $format);
@@ -152,7 +152,7 @@ class VirtuosoTaskBase extends \Task {
    *   The string version of the query to execute.
    *
    */
-  function sparql($query) {
+  public function sparql($query) {
     // @todo: The port should be passed as a variable below.
     $connect_string = $this->protoccol . $this->dsn . ':' . $this->port . '/sparql';
     $client = new Client($connect_string);
