@@ -152,9 +152,9 @@ class VirtuosoTaskBase extends \Task {
    *   The string version of the query to execute.
    *
    */
-  public function sparql($query) {
+  public function query($query) {
     // @todo: The port should be passed as a variable below.
-    $connect_string = $this->protoccol . $this->dsn . ':' . $this->port . '/sparql';
+    $connect_string = $this->protocol . $this->dsn . ':' . $this->port . '/sparql';
     $client = new Client($connect_string);
     $client->query($query);
   }
