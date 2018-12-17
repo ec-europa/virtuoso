@@ -25,7 +25,7 @@ class ImportRdfFixtures extends VirtuosoTaskBase {
       // we enforce autocommit on the transaction log to split up the memory
       // load.
       // @see: http://vos.openlinksw.com/owiki/wiki/VOS/VirtTipsAndTricksGuideDeleteLargeGraphs
-      $this->sparql("DEFINE sql:log-enable 3 CLEAR GRAPH <$graph_name>;");
+      $this->query("DEFINE sql:log-enable 3 CLEAR GRAPH <$graph_name>;");
       exec("curl --digest --user $this->user:$this->pass --verbose --url 'http://$this->dsn:8890/sparql-graph-crud-auth?graph-uri=$graph_name' -T $rdf_file_path");
     }
   }
