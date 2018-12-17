@@ -1,8 +1,4 @@
 <?php
-/**
- * @file
- * Contains \DrupalProject\build\Phing\PurgeVirtuosoBackend.
- */
 
 namespace Virtuoso\Task;
 
@@ -15,7 +11,7 @@ class DeleteAllTriples extends VirtuosoTaskBase {
    * Deletes all triples from the backend.
    */
   public function main() {
-    $this->sparql("DROP ALL;");
+    $this->sparql('DROP ALL;');
   }
 
 }
