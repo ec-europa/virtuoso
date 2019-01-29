@@ -151,12 +151,14 @@ class VirtuosoTaskBase extends \Task {
    * @param string $query
    *   The string version of the query to execute.
    *
+   * @return \EasyRdf\Sparql\Result|\EasyRdf\Graph
+   *   The result of the query.
    */
   public function query($query) {
     // @todo: The port should be passed as a variable below.
     $connect_string = $this->protocol . $this->dsn . ':' . $this->port . '/sparql';
     $client = new Client($connect_string);
-    $client->query($query);
+    return $client->query($query);
   }
 
   /**
